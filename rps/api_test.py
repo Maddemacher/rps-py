@@ -22,7 +22,7 @@ def _create_game(client, name='emil', expected_status=201):
 
     assert response.status_code == expected_status
 
-    if(expected_status == 201):
+    if expected_status == 201:
         return response.get_data(as_text=True)
 
     return None

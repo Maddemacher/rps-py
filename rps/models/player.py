@@ -9,12 +9,12 @@ class Player(object):
         self.move = None
 
     def set_move(self, move):
-        if(self.move):
+        if self.move:
             raise ConflictError
 
         _move = move.lower()
 
-        if(not any(map(lambda m: m == _move, moves))):
+        if not any(map(lambda m: m == _move, moves)):
             raise ValueError
 
         self.move = move

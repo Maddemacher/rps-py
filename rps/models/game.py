@@ -11,30 +11,30 @@ class Game(object):
         self.result = None
 
     def _evaluate_winner(self):
-        if(self.players[0].move == self.players[1].move):
+        if self.players[0].move == self.players[1].move:
             self.result = 'tie'
             return
 
-        if(self.players[0].move == rock and self.players[1].move == scissors):
+        if self.players[0].move == rock and self.players[1].move == scissors:
             self.result = '{} wins'.format(self.players[0].name)
             return
 
-        if(self.players[0].move == paper and self.players[1].move == rock):
+        if self.players[0].move == paper and self.players[1].move == rock:
             self.result = '{} wins'.format(self.players[0].name)
             return
 
-        if(self.players[0].move == scissors and self.players[1].move == paper):
+        if self.players[0].move == scissors and self.players[1].move == paper:
             self.result = '{} wins'.format(self.players[0].name)
             return
 
         self.result = '{} wins'.format(self.players[1].name)
 
     def _evaluate(self):
-        if(len(self.players) < 2):
+        if len(self.players) < 2:
             self.status = "Ongoing"
             return
 
-        if(any(map(lambda p: p.move is None, self.players))):
+        if any(map(lambda p: p.move is None, self.players)):
             self.status = "waiting for moves"
             return
 
@@ -44,7 +44,7 @@ class Game(object):
     def _get_player(self, name):
         player = next(p for p in self.players if p.name == name)
 
-        if(player is None):
+        if player is None:
             raise NotFoundError
 
         return player
@@ -57,16 +57,16 @@ class Game(object):
         self._evaluate()
 
     def add_player(self, name):
-        if(len(self.players) == 2):
+        if len(self.players) == 2:
             raise GameFullError
 
-        if(any(map(lambda p: p.name == name, self.players))):
+        if any(map(lambda p: p.name == name, self.players)):
             raise ConflictError
 
         self.players.append(Player(name))
 
     def repr_json(self):
-        if(self.status == 'done'):
+        if self.status == 'done':
             return dict(players=self.players, status=self.status, result=self.result)
 
         return dict(
