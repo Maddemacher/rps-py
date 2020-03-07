@@ -8,7 +8,7 @@ from rps.exceptions import NotFoundError
 class GameService:
     games = dict()
 
-    def new_game(self, name):
+    def new_game(self, name: str) -> str:
         game_id = str(uuid.uuid4())
 
         new_game = Game()
@@ -18,15 +18,15 @@ class GameService:
 
         return game_id
 
-    def join_game(self, gameId, name):
-        game = self.get_game(gameId)
+    def join_game(self, game_id: str, name: str):
+        game = self.get_game(game_id)
 
         if game is None:
             raise NotFoundError
 
         game.add_player(name)
 
-    def make_move(self, game_id, name, move):
+    def make_move(self, game_id: str, name: str, move: str):
         game = self.get_game(game_id)
 
         if game is None:
@@ -34,5 +34,5 @@ class GameService:
 
         game.make_move(name, move)
 
-    def get_game(self, gameId):
-        return self.games.get(gameId, None)
+    def get_game(self, game_id: str) -> Game:
+        return self.games.get(game_id, None)

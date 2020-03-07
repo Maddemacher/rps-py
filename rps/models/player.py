@@ -1,14 +1,17 @@
 
+from dataclasses import dataclass, asdict
+
+
 from rps.models.moves import moves
 from rps.exceptions import ConflictError
 
 
+@dataclass
 class Player:
-    def __init__(self, name):
-        self.name = name
-        self.move = None
+    name: str
+    move: str = None
 
-    def set_move(self, move):
+    def set_move(self, move: str):
         if self.move:
             raise ConflictError
 
@@ -18,6 +21,3 @@ class Player:
             raise ValueError
 
         self.move = move
-
-    def repr_json(self):
-        return dict(name=self.name, move=self.move)

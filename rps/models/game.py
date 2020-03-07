@@ -1,4 +1,6 @@
 
+from dataclasses import asdict
+
 from rps.models.player import Player
 from rps.models.moves import rock, paper, scissors
 from rps.exceptions import GameFullError, ConflictError, NotFoundError
@@ -41,7 +43,7 @@ class Game:
         self.status = "done"
         self._evaluate_winner()
 
-    def _get_player(self, name):
+    def _get_player(self, name: str) -> Player:
         player = next(p for p in self.players if p.name == name)
 
         if player is None:
@@ -49,14 +51,14 @@ class Game:
 
         return player
 
-    def make_move(self, name, move):
+    def make_move(self, name: str, move: str):
         player = self._get_player(name)
 
         player.set_move(move)
 
         self._evaluate()
 
-    def add_player(self, name):
+    def add_player(self, name: str):
         if len(self.players) == 2:
             raise GameFullError
 
@@ -65,9 +67,13 @@ class Game:
 
         self.players.append(Player(name))
 
-    def repr_json(self):
+    def repr_json(self) -> dict:
         if self.status == 'done':
-            return dict(players=self.players, status=self.status, result=self.result)
+            return dict(
+                players=list(map(lambda p: asdict(p), self.players)),
+                status=self.status,
+                result=self.result
+            )
 
         return dict(
             players=list(map(lambda p: dict(name=p.name), self.players)),
