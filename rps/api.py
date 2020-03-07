@@ -1,7 +1,8 @@
-from flask import jsonify, request
+from flask import jsonify, request, abort
 import json
 
 from rps import app
+from rps.models.moves import Move
 from rps.services.gameService import GameService
 from rps.utils.json import ComplexEncoder
 from rps.exceptions import NotFoundError, GameFullError, ConflictError
@@ -17,7 +18,7 @@ def all_games():
 @app.route('/api/game', methods=['POST'])
 def new_games():
     if not request.json['name']:
-        return "", 400
+        abort(400)
 
     game_id = game_service.new_game(
         request.json['name']
@@ -34,11 +35,11 @@ def join_game(game_id):
             request.json['name']
         )
     except NotFoundError:
-        return "", 404
+        abort(404)
     except GameFullError:
-        return "", 412
+        abort(412)
     except ConflictError:
-        return "", 409
+        abort(409)
 
     return "OK"
 
@@ -49,14 +50,14 @@ def make_move(game_id):
         game_service.make_move(
             game_id,
             request.json['name'],
-            request.json['move']
+            Move.from_string(request.json['move'])
         )
     except NotFoundError:
-        return "", 404
+        abort(404)
     except ValueError:
-        return "", 400
+        abort(400)
     except ConflictError:
-        return "", 409
+        abort(409)
 
     return "OK"
 
@@ -65,7 +66,7 @@ def make_move(game_id):
 def get_game(game_id):
     game = game_service.get_game(game_id)
 
-    if game == None:
-        return "", 404
+    if game is None:
+        abort(404)
 
     return json.dumps(game, cls=ComplexEncoder)

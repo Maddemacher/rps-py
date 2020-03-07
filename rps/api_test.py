@@ -80,6 +80,17 @@ def test_join_second_player(client):
     assert game['players'][1]['name'] == "lasse"
 
 
+def test_cant_join_third_player(client):
+    game_id = _create_game(client)
+    _join_player(client, game_id)
+    _join_player(client, game_id, "hej", 412)
+
+    game = _get_game(client, game_id)
+
+    assert len(game['players']) == 2
+    assert game['players'][1]['name'] == "lasse"
+
+
 def test_join_player_with_same_name(client):
     game_id = _create_game(client, "emil")
     _join_player(client, game_id, "emil", 409)
@@ -149,3 +160,39 @@ def test_tie(client):
     game = _get_game(client, game_id)
 
     assert game['result'] == 'tie'
+
+
+def test_rock_beats_scissors(client):
+    game_id = _create_game(client, "emil")
+    _join_player(client, game_id, "lasse")
+
+    _make_move(client, game_id, "emil", "rock")
+    _make_move(client, game_id, "lasse", "scissors")
+
+    game = _get_game(client, game_id)
+
+    assert game['result'] == 'emil wins'
+
+
+def test_scissors_beat_paper(client):
+    game_id = _create_game(client, "emil")
+    _join_player(client, game_id, "lasse")
+
+    _make_move(client, game_id, "emil", "scissors")
+    _make_move(client, game_id, "lasse", "paper")
+
+    game = _get_game(client, game_id)
+
+    assert game['result'] == 'emil wins'
+
+
+def test_paper_beats_rock(client):
+    game_id = _create_game(client, "emil")
+    _join_player(client, game_id, "lasse")
+
+    _make_move(client, game_id, "emil", "paper")
+    _make_move(client, game_id, "lasse", "rock")
+
+    game = _get_game(client, game_id)
+
+    assert game['result'] == 'emil wins'

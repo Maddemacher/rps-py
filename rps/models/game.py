@@ -2,7 +2,7 @@
 from dataclasses import asdict
 
 from rps.models.player import Player
-from rps.models.moves import rock, paper, scissors
+from rps.models.moves import Move
 from rps.exceptions import GameFullError, ConflictError, NotFoundError
 
 
@@ -17,15 +17,7 @@ class Game:
             self.result = 'tie'
             return
 
-        if self.players[0].move == rock and self.players[1].move == scissors:
-            self.result = f'{self.players[0].name} wins'
-            return
-
-        if self.players[0].move == paper and self.players[1].move == rock:
-            self.result = f'{self.players[0].name} wins'
-            return
-
-        if self.players[0].move == scissors and self.players[1].move == paper:
+        if self.players[0].move > self.players[1].move:
             self.result = f'{self.players[0].name} wins'
             return
 
@@ -51,7 +43,7 @@ class Game:
 
         return player
 
-    def make_move(self, name: str, move: str):
+    def make_move(self, name: str, move: Move):
         player = self._get_player(name)
 
         player.set_move(move)
