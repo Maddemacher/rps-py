@@ -3,7 +3,7 @@ import json
 
 
 def _get_game(client, game_id, expected_status=200):
-    response = client.get('/api/game/{}'.format(game_id))
+    response = client.get(f'/api/game/{game_id}')
 
     assert response.status_code == expected_status
 
@@ -22,7 +22,7 @@ def _create_game(client, name='emil', expected_status=201):
 
     assert response.status_code == expected_status
 
-    if(expected_status == 201):
+    if expected_status == 201:
         return response.get_data(as_text=True)
 
     return None
@@ -30,7 +30,7 @@ def _create_game(client, name='emil', expected_status=201):
 
 def _join_player(client, game_id, name='lasse', expected_status=200):
     response = client.put(
-        '/api/game/{}/join'.format(game_id),
+        f'/api/game/{game_id}/join',
         data=json.dumps({'name': name}),
         content_type='application/json'
     )
@@ -40,7 +40,7 @@ def _join_player(client, game_id, name='lasse', expected_status=200):
 
 def _make_move(client, game_id, name, move, expected_status=200):
     response = client.put(
-        '/api/game/{}/move'.format(game_id),
+        f'/api/game/{game_id}/move',
         data=json.dumps({
             'name': name,
             'move': move,

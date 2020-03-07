@@ -5,7 +5,7 @@ from rps.models.game import Game
 from rps.exceptions import NotFoundError
 
 
-class GameService(object):
+class GameService:
     games = dict()
 
     def new_game(self, name):
@@ -21,7 +21,7 @@ class GameService(object):
     def join_game(self, gameId, name):
         game = self.get_game(gameId)
 
-        if(game is None):
+        if game is None:
             raise NotFoundError
 
         game.add_player(name)
@@ -29,7 +29,7 @@ class GameService(object):
     def make_move(self, game_id, name, move):
         game = self.get_game(game_id)
 
-        if(game is None):
+        if game is None:
             raise NotFoundError
 
         game.make_move(name, move)

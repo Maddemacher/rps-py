@@ -16,7 +16,7 @@ def all_games():
 
 @app.route('/api/game', methods=['POST'])
 def new_games():
-    if(not request.json['name']):
+    if not request.json['name']:
         return "", 400
 
     game_id = game_service.new_game(
@@ -65,7 +65,7 @@ def make_move(game_id):
 def get_game(game_id):
     game = game_service.get_game(game_id)
 
-    if (game == None):
+    if game == None:
         return "", 404
 
     return json.dumps(game, cls=ComplexEncoder)
