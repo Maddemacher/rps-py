@@ -116,6 +116,18 @@ def test_make_unknown_move(client):
     _make_move(client, game_id, "emil", "asd", 400)
 
 
+def test_make_empty_move(client):
+    game_id = _create_game(client, "emil")
+
+    _make_move(client, game_id, "emil", "", 400)
+
+
+def test_make_none_move(client):
+    game_id = _create_game(client, "emil")
+
+    _make_move(client, game_id, "emil", None, 400)
+
+
 def test_does_not_show_moves_until_done(client):
     game_id = _create_game(client, "emil")
 

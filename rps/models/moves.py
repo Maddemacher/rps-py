@@ -4,22 +4,9 @@ import enum
 
 
 class Move(enum.Enum):
-    Rock = 0
-    Paper = 1
-    Scissors = 2
-
-    @classmethod
-    def from_string(cls, value):
-        if value == "rock":
-            return cls.Rock
-
-        if value == "paper":
-            return cls.Paper
-
-        if value == "scissors":
-            return cls.Scissors
-
-        raise ValueError
+    rock = 0
+    paper = 1
+    scissors = 2
 
     def repr_json(self):
         return self.name
@@ -31,4 +18,4 @@ class Move(enum.Enum):
         if self.value > other.value:
             return True
 
-        return other == Move.Scissors and self.value == Move.Rock
+        return other == Move.scissors and self.value == Move.rock

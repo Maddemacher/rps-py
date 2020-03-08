@@ -47,14 +47,19 @@ def join_game(game_id):
 @app.route('/api/game/<string:game_id>/move', methods=['PUT'])
 def make_move(game_id):
     try:
+        move = request.json['move']
+
+        if move is None:
+            abort(400)
+
         game_service.make_move(
             game_id,
             request.json['name'],
-            Move.from_string(request.json['move'])
+            Move[move.lower()]
         )
     except NotFoundError:
         abort(404)
-    except ValueError:
+    except KeyError:
         abort(400)
     except ConflictError:
         abort(409)
